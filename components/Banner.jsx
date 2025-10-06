@@ -1,37 +1,3 @@
-// import React from "react";
-// import { Button } from "./ui/button";
-
-// const Banner = () => {
-//     return(
-//         <>
-//             <div className="bg-[rgba(62,161,255,0.04)] flex p-[50px]">
-//                 <div className="py-0 px-[77px] flex flex-col justify-center gap-8px w-full">
-//                     <div className="text-[52px]">
-//                         <h2>Every good things start with good health</h2>
-//                     </div>
-
-//                     <div className="text-[18px] text-[#5C5C5C] font-[500]">
-//                         <p>We are here to serve people with patient centered-care to deliver outstanding healthcare for better lives</p>
-//                     </div>
-
-//                     <div className="flex gap-[28px] mt-[20px] mr-[0px] mb-[0px] ml-[10px]">
-//                         <Button className='bg-[#1560bd] text-[#ffff] py-[20px] px-[40px] cursor-pointer hover:bg-[#0047AB]'>Get Started</Button>
-//                         <Button className='bg-[#1560bd] text-[#ffff] py-[20px] px-[40px] cursor-pointer hover:bg-[#0047AB]'>Find Doctors</Button>
-//                     </div>
-
-//                 </div>
-
-//                 <div className="relative w-full">
-//                     <img src="/images/ellipse.png" alt="ellipse" width="500px"/>
-//                     <img src="/DoctorsImage.png" alt="doctor" width='450px' className="absolute top-0 z-10 left-[45px]"/>
-//                 </div>
-//             </div>
-//         </>
-//     )
-// }
-
-// export default Banner;
-
 import React from "react";
 import { Button } from "./ui/button";
 import { ArrowRight, Stethoscope} from "lucide-react";
