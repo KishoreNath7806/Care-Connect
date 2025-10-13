@@ -1,6 +1,7 @@
-import { Stethoscope } from "lucide-react";
+import { Check, Stethoscope } from "lucide-react";
 import React from "react";
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { creditBenefits } from "@/lib/data";
 
 
 const ConsultationPackages = () => {
@@ -17,15 +18,20 @@ const ConsultationPackages = () => {
                     <Card className="mt-12 bg-muted/20 border-[rgba(62,161,255,0.04)]-900/30">
                         <CardHeader>
                             <CardTitle className="flex items-center text-xl font-semibold text-gray-500"><Stethoscope className="h-5 w-5 mr-2 text-[#1560bd]"/>How Our Credit System Works</CardTitle>
-                            <CardDescription>Card Description</CardDescription>
-                            <CardAction>Card Action</CardAction>
                         </CardHeader>
                         <CardContent>
-                            <p>Card Content</p>
+                            {creditBenefits.map((benefit, index) => {
+                                return(
+                                    <li key={index} className="flex items-start">
+                                        <div className="mr-3 mt-1 bg-blue-900/20 p-1 rounded-full flex">
+                                            <Check className="h-4 w-4 text-[#1560bd]"/>
+                                        </div>
+                                        <p className="text-muted-foreground"
+                                            dangerouslySetInnerHTML={{__html:benefit}}/>
+                                    </li>
+                                )
+                            })}
                         </CardContent>
-                        <CardFooter>
-                            <p>Card Footer</p>
-                        </CardFooter>
                     </Card>
                 </div>
             </div>

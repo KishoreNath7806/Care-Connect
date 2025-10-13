@@ -4,6 +4,8 @@ import Banner from '../components/Banner';
 import HospitalList from '../components/HospitalList'
 import Services from '../components/Services';
 import ConsultationPackages from "@/components/ConsultationPackages";
+import Testimonials from "@/components/Testimonials";
+import Banner2 from "@/components/Banner2";
 
 export default function Home() {
   return (
@@ -12,6 +14,8 @@ export default function Home() {
           <HospitalList/>
           <Services />
           <ConsultationPackages />
+          <Testimonials />
+          <Banner2 />
           
     </div>
   );
