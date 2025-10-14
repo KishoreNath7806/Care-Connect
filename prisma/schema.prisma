@@ -29,6 +29,67 @@ model User{
   //Patient specific field
   credits                   Int?                     @default(2)
 
+  //doctor specific field
+  speciality               String?
+  experience               Int?
+  credentialUrl            String?
+  description              String?                  @db.Text
+  verificationStatus        VerificationStatus      @default(PENDING)
+
+
+  //relations
+  patientAppointments      Appointment[]           @relation("PatientAppointments") 
+  doctorAppointments       Appointment[]           @relation("DoctorAppointments")
+  availabilities           Availability[]
+  transactions             CreditTransaction[]
+
+}
+
+
+model Availability{
+  id          String      @id @default(uuid())
+  doctorId    String
+  doctor      User        @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  startTime   DateTime
+  endTime     DateTime
+  status      SlotStatus   @default(AVAILABLE)
+  @@index([doctorId, startTime])
+}
+
+
+model Appointment{
+  id            String      @id @default(uuid())
+  patientId     String
+  patient       User        @relation("PatientAppointments", fields: [patientId], references: [id])
+  doctorId      String
+  doctor        User        @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  startTime     DateTime
+  endTime       DateTime
+  status        AppointmentStatus @default(SCHEDULED)
+  notes         String?     @db.Text
+  patientDescription String?     @db.Text
+
+
+  //video call fields
+  videoSessionId String?
+  videoSessionToken String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([status, startTime])
+  @@index([doctorId, startTime])
+}
+
+
+
+model CreditTransaction{
+  id          String      @id @default(uuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount      Int
+  type        TransactionType
+  packageId   String?
+  createdAt   DateTime    @default(now())
 }
 
 enum UserRole {
@@ -37,3 +98,28 @@ enum UserRole {
   DOCTOR
   ADMIN
 }
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum SlotStatus {
+  AVAILABLE
+  BOOKED
+  BLOCKED
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+enum TransactionType {
+  CREDIT_PURCHASE
+  APPOINTMENT_DEDUCTION
+  ADMIN_ADJUSTMENT
+}
+
