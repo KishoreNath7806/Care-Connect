@@ -94,7 +94,7 @@ model CreditTransaction{
 
 enum UserRole {
   UNASSIGNED
-  Patient
+  PATIENT
   DOCTOR
   ADMIN
 }
