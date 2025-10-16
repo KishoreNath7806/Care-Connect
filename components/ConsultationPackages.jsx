@@ -2,6 +2,7 @@ import { Check, Stethoscope } from "lucide-react";
 import React from "react";
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { creditBenefits } from "@/lib/data";
+import Pricing from "./pricing";
 
 
 const ConsultationPackages = () => {
@@ -15,6 +16,7 @@ const ConsultationPackages = () => {
 
                 <div>
                     {/* Pricing Table */}
+                    <Pricing />
                     <Card className="mt-12 bg-muted/20 border-[rgba(62,161,255,0.04)]-900/30">
                         <CardHeader>
                             <CardTitle className="flex items-center text-xl font-semibold text-gray-500"><Stethoscope className="h-5 w-5 mr-2 text-[#1560bd]"/>How Our Credit System Works</CardTitle>
