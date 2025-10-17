@@ -1,6 +1,25 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent } from "./ui/card";
 import { testimonials } from "@/lib/data";
+import { Star } from "lucide-react";
+
+const StarRating = ({ rating }) => {
+  return (
+    <div className="flex gap-1 mb-2">
+      {[...Array(5)].map((_, index) => (
+        <Star
+          key={index}
+          size={16}
+          className={`${
+            index < rating 
+              ? "fill-[#FFD700] text-[#FFD700]" 
+              : "fill-gray-200 text-gray-200"
+          }`}
+        />
+      ))}
+    </div>
+  );
+};
 
 const Testimonials = () => {
     return(
@@ -16,15 +35,6 @@ const Testimonials = () => {
                         {testimonials.map((testimonial, index) => {
                             return(
                                 <Card key={index} className="border-[#BBDCE5] hover:border-emerald-800/40 transition-all duration-300">
-                                    {/* <CardHeader className="pb-2">
-                                        <div className="bg-emerald-900/20 p-3 rounded-lg w-fit mb-4">
-                                            {testimonial.icon}
-                                        </div>
-                                        <CardTitle className="text-xl font-semibold text-white">
-                                            {testimonial.title}
-                                        </CardTitle>
-                                    </CardHeader> */}
-
                                     <CardContent className="pt-4">
                                         <div className="flex items-center mb-4">
                                             <div className="w-12 h-12 rounded-full bg-emerald-900/20 flex items-center justify-center mr-4">
@@ -34,6 +44,9 @@ const Testimonials = () => {
                                                 <h4 className="text-gray-500 font-semibold">{testimonial.name}</h4>
                                                 <p className="text-gray-500">{testimonial.role}</p>
                                             </div>
+                                        </div>
+                                        <div className="ml-1">
+                                            <StarRating rating={testimonial.rating} />
                                         </div>
                                         <p className="text-muted-foreground">
                                             &quot;{testimonial.quote}&quot;
