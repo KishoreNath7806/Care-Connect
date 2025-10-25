@@ -37,12 +37,12 @@ export async function setUserRole(formData){
         }
 
         if(role === "DOCTOR"){
-            const specialty = formData.get("specialty");
+            const speciality = formData.get("speciality");
             const experience = parseInt(formData.get("experience"),10);
-            const credetialUrl = formData.get("credentialUrl");
+            const credentialUrl = formData.get("credentialUrl");
             const description = formData.get("description");
 
-            if(!specialty || !experience || !credetialUrl || !description){
+            if(!speciality || !experience || !credentialUrl || !description){
                 throw new Error("All fields are required for doctor registration");
             }
 
@@ -50,7 +50,7 @@ export async function setUserRole(formData){
                 where:{clerkUserId : userId},
                 data:{
                     role:"DOCTOR",
-                    specialty,
+                    speciality,
                     experience,
                     credentialUrl,
                     description,
