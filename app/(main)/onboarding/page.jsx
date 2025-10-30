@@ -15,6 +15,7 @@ import { Loader, Stethoscope, User } from "lucide-react";
 import useFetch from "@/hooks/use-fetch";
 import { useRouter } from "next/navigation";
 import { setUserRole } from "@/actions/onboarding";
+import { useSearchParams } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -46,6 +47,8 @@ const doctorFormSchema = z.object({
 const OnboardingPage = () => {
   const [step, setStep] = useState("choose-role");
   const router = useRouter();
+
+
 
   const { data, fn: submitUserRole, loading } = useFetch(setUserRole);
 
@@ -82,6 +85,32 @@ const OnboardingPage = () => {
       router.push(data.redirect);
     }
   }, [data]);
+
+
+  const searchParams = useSearchParams();
+  const editMode = searchParams?.get("edit") === "1";
+
+  useEffect(() => {
+    if (!editMode) return;
+
+    // Jump to doctor form immediately
+    setStep("doctor-form");
+
+    // Prefill from API
+    (async () => {
+      try {
+        const res = await fetch("/api/me", { cache: "no-store" });
+        if (!res.ok) return;
+        const me = await res.json();
+
+        if (me?.speciality) setValue("speciality", me.speciality);
+        if (typeof me?.experience === "number") setValue("experience", me.experience);
+        if (me?.credentialUrl) setValue("credentialUrl", me.credentialUrl);
+        if (me?.description) setValue("description", me.description);
+      } catch {}
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editMode]);
 
   const onDoctorSubmit = async (data) => {
     if (loading) return;

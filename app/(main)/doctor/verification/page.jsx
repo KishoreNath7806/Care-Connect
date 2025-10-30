@@ -5,7 +5,6 @@ import { AlertCircle, ClipboardCheck, XCircle } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
-import { is } from "zod/v4/locales";
 
 const VerificationPage = async () => {
   const user = await getCurrentUser();
@@ -56,11 +55,23 @@ const VerificationPage = async () => {
 
             <p className="text-gray-400">{isRejected?"You may revise your doctor profile and submit it again for approval.":"In the meantime, feel free to explore our platform or contact our support team if you need any assistance."}</p>
           
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {/* <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild variant="outline" className="bg-amber-900/50 text-white hover:bg-amber-900/70 hover:text-white">
                 <Link href="/">Return to Home</Link>
               </Button>
-            </div>
+            </div> */}
+
+            {isRejected? (
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-2">
+                <Button asChild className="bg-red-600 text-white hover:bg-red-700">
+                  <Link href="/onboarding?edit=1">Review & Resubmit</Link>
+                </Button>
+              </div>
+            ): (<div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild variant="outline" className="bg-amber-900/50 text-white hover:bg-amber-900/70 hover:text-white">
+                <Link href="/">Return to Home</Link>
+              </Button>
+            </div>)}
           </CardContent>
         </Card>
       </div>

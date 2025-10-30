@@ -18,7 +18,10 @@ const OnboardingLayout = async ({children}) => {
             if(user.verificationStatus === "VERIFIED"){
                 redirect("/doctor");
             }
-            else{
+            // else{
+            //     redirect("/doctor/verification");
+            // }
+            else if (user.verificationStatus === "PENDING"){
                 redirect("/doctor/verification");
             }
         }
