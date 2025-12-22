@@ -31,11 +31,11 @@ export async function getPendingDoctors(){
     try{
         const pendingDoctors = await db.user.findMany({
             where: {role: "DOCTOR", verificationStatus: "PENDING"},
-            order:{createdAt: "desc"}
+            orderBy:{createdAt: "desc"}
         });
         return {doctors: pendingDoctors};
     }catch(error){
-        throw new Error("Error fetching pending doctors");
+        throw new Error(`Error fetching pending doctors, ${error.message}`);
     }
 }
 
@@ -48,7 +48,7 @@ export async function getVerifiedDoctors(){
     try{
         const verifiedDoctors = await db.user.findMany({
             where: {role: "DOCTOR", verificationStatus: "VERIFIED"},
-            order:{createdAt: "asc"}
+            orderBy:{createdAt: "asc"}
         });
         return {doctors: verifiedDoctors};
     }catch(error){

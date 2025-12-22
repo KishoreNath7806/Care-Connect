@@ -1,11 +1,16 @@
+import { getPendingDoctors, getVerifiedDoctors } from '@/actions/admin';
 import { TabsContent } from '@/components/ui/tabs';
 import React from 'react'
+import PendingDoctors from './_components/pending-doctors';
+import VerifiedDoctors from './_components/verified-doctors';
 
-const AdminPage = () => {
+const AdminPage = async () => {
+
+  const [pendingDoctorsData, verifiedDoctorsData] = await Promise.all([getPendingDoctors(), getVerifiedDoctors()])
   return (
     <div>
-        <TabsContent value="pending">Make changes to your account here.</TabsContent>
-        <TabsContent value="doctors">Change your password here.</TabsContent>
+        <TabsContent value="pending" className='border-none p-0'><PendingDoctors doctors={pendingDoctorsData.doctors || []} /></TabsContent>
+        <TabsContent value="doctors" className='border-none p-0'><VerifiedDoctors doctors={verifiedDoctorsData.doctors || []} /></TabsContent>
     </div>
   )
 }
