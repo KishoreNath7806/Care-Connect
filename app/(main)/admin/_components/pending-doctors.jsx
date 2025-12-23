@@ -11,12 +11,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import useFetch from "@/hooks/use-fetch";
-import { Dialog, DialogContent, DialogTrigger } from "@radix-ui/react-dialog";
 import { Badge } from "@/components/ui/badge";
 import { User } from "lucide-react";
 import React, { useState } from "react";
+import { format } from "date-fns";
 
 const PendingDoctors = ({ doctors }) => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
@@ -78,7 +78,8 @@ const PendingDoctors = ({ doctors }) => {
                       <div className="flex items-center gap-2 self-end md:self-auto">
                         <Badge
                           variant="outline"
-                          className="bg-amber-900/20 border-amber-900/30 text-amber-400"
+                          className="bg-amber-900/20 border-amber-900/30 text-amber-900"
+                          size="lg"
                         >
                           Pending
                         </Badge>
@@ -108,12 +109,28 @@ const PendingDoctors = ({ doctors }) => {
           <DialogTrigger>Open</DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Are you absolutely sure?</DialogTitle>
+              <DialogTitle>Doctor Verification Details</DialogTitle>
               <DialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
+                Be careful while reviewing doctor&apos;s informations to make decisions
               </DialogDescription>
             </DialogHeader>
+
+            <div className="space-y-6 space-x-10 py-4">
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="space-y-1 flex-1">
+                  <h4 className='text-sm font-medium text-muted-foreground'>Full Name</h4>
+                  <p className="text-base font-medium text-blue-500">{selectedDoctor.name}</p>
+                </div>
+                <div className='space-y-1 flex-1'>
+                  <h4 className='text-sm font-medium text-muted-foreground'>E-mail</h4>
+                  <p className="text-base font-medium text-blue-500">{selectedDoctor.email}</p>
+                </div>
+                <div className="space-y-1 flex-1">
+                  <h4 className='text-sm font-medium text-muted-foreground'>Application Date</h4>
+                  <p className="text-base font-medium text-blue-500">{format(new Date(selectedDoctor.createdAt),'ppp')}</p>
+                </div>
+              </div>
+            </div>
           </DialogContent>
         </Dialog>
       )}
