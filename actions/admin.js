@@ -56,7 +56,7 @@ export async function getVerifiedDoctors(){
     }
 }
 
-export async function updateDoctorStatus(){
+export async function updateDoctorStatus(formData){
     const isAdmin = await verifyAdmin();
     if(!isAdmin){
         throw new Error("Unauthorized");

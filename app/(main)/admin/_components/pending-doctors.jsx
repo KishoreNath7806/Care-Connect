@@ -11,12 +11,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import useFetch from "@/hooks/use-fetch";
 import { Badge } from "@/components/ui/badge";
-import { User } from "lucide-react";
-import React, { useState } from "react";
+import { Check, ExternalLink, FileText, Medal, User, X } from "lucide-react";
+import{BarLoader} from "react-spinners"
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
+import { Separator } from "@/components/ui/separator";
 
 const PendingDoctors = ({ doctors }) => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
@@ -33,7 +43,21 @@ const PendingDoctors = ({ doctors }) => {
 
   const handleCloseDialog = () => {
     setSelectedDoctor(null);
+  };
+
+  const handleUpdateStatus = async (doctorId, status) => {
+    if(loading) return;
+    const formData = new FormData();
+    formData.append("doctorId", doctorId);
+    formData.append("status", status);
+    await submitStatusUpdate(formData);
   }
+
+  useEffect(() => {
+    if(data && data?.success){
+      handleCloseDialog();
+    }
+  }, [data]);
 
   return (
     <div>
@@ -105,32 +129,107 @@ const PendingDoctors = ({ doctors }) => {
       </Card>
 
       {selectedDoctor && (
-        <Dialog open={!!selectedDoctor} onOpenChange= {handleCloseDialog}>
+        <Dialog open={!!selectedDoctor} onOpenChange={handleCloseDialog}>
           <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-3xl">
             <DialogHeader>
               <DialogTitle>Doctor Verification Details</DialogTitle>
               <DialogDescription>
-                Be careful while reviewing doctor&apos;s informations to make decisions
+                Be careful while reviewing doctor&apos;s informations to make
+                decisions
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-6 space-x-10 py-4">
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="space-y-1 flex-1">
-                  <h4 className='text-sm font-medium text-muted-foreground'>Full Name</h4>
-                  <p className="text-base font-medium text-blue-500">{selectedDoctor.name}</p>
-                </div>
-                <div className='space-y-1 flex-1'>
-                  <h4 className='text-sm font-medium text-muted-foreground'>E-mail</h4>
-                  <p className="text-base font-medium text-blue-500">{selectedDoctor.email}</p>
+                  <h4 className="text-sm font-medium text-muted-foreground">
+                    Full Name
+                  </h4>
+                  <p className="text-base font-medium text-blue-500">
+                    {selectedDoctor.name}
+                  </p>
                 </div>
                 <div className="space-y-1 flex-1">
-                  <h4 className='text-sm font-medium text-muted-foreground'>Application Date</h4>
-                  <p className="text-base font-medium text-blue-500">{format(new Date(selectedDoctor.createdAt),'ppp')}</p>
+                  <h4 className="text-sm font-medium text-muted-foreground">
+                    E-mail
+                  </h4>
+                  <p className="text-base font-medium text-blue-500">
+                    {selectedDoctor.email}
+                  </p>
+                </div>
+                <div className="space-y-1 flex-1">
+                  <h4 className="text-sm font-medium text-muted-foreground">
+                    Application Date
+                  </h4>
+                  <p className="text-base font-medium text-blue-500">
+                    {format(new Date(selectedDoctor.createdAt), "ppp")}
+                  </p>
                 </div>
               </div>
+              <Separator className="bg-blue-200" />
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Medal className="h-5 w-5 text-blue-400" />
+                  <h3 className="text-blue-400 font-medium">
+                    Professional Information
+                  </h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6">
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-medium text-muted-foreground">
+                      Speciality
+                    </h4>
+                    <p className="text-blue-500">{selectedDoctor.speciality}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-medium text-muted-foreground">
+                      Years of Experiance
+                    </h4>
+                    <p className="text-blue-500">{selectedDoctor.experience}</p>
+                  </div>
+                  <div className="space-y-1 col-span-2">
+                    <h4 className="text-sm font-medium text-muted-foreground">
+                      Credentials
+                    </h4>
+                    <div className="flex items-center">
+                      <a
+                        href={selectedDoctor.credentialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 underline flex items-center"
+                      >
+                        View Credentials
+                      </a>
+                      <ExternalLink className="ml-1 h-4 w-4 text-blue-400" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <Separator className="bg-blue-200" />
+
+              <div>
+                <div className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-blue-400"/>
+                  <h3 className="text-blue-400 font-medium">Service Description</h3>
+                </div>
+                <p className="text-muted-foreground whitespace-pre-line">{selectedDoctor.description}</p>  
+              </div>
             </div>
+
+            {loading && <BarLoader width={"100%"} color="#3b82f6"/>}
+
+            <DialogFooter className="flex sm:justify-between">
+              <Button variant="destructive" disabled={loading} className="bg-red-600 hover:bg-red-700" onClick={()=>{handleUpdateStatus(selectedDoctor.id, "REJECTED")}}>
+                <X className="mr-2 h-4 w-4"/>
+                Reject
+              </Button>
+              <Button disabled={loading} className="bg-green-600 hover:bg-green-700" onClick={()=>{handleUpdateStatus(selectedDoctor.id, "VERIFIED")}}>
+                <Check className="mr-2 h-4 w-4"/>
+                Approve
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       )}
