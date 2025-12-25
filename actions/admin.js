@@ -83,7 +83,7 @@ export async function updateDoctorStatus(formData){
     }
 }
 
-export async function updateDoctorActiveStatus(){
+export async function updateDoctorActiveStatus(formData){
     const isAdmin = await verifyAdmin();
     if(!isAdmin){
         throw new Error("Unauthorized");
